@@ -46,6 +46,7 @@ Task("Update-Module-Manifest")
     .Does(() =>
 {    
     StartPowershellFile("Scripts/UpdateModuleManifest.ps1", new PowershellSettings()
+		.OutputToAppConsole(false)
         .SetFormatOutput()
         .SetLogOutput()
         .WithArguments(args=>

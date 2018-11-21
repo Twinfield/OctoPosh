@@ -56,11 +56,11 @@ Task("Restore-NuGet-Packages")
 
 Task("Replace-Test-Project-App-Settings")   
     .IsDependentOn("Restore-NuGet-Packages")
-	.WithCriteria(SkipUnitTests == false)
     .Description("Replace appconfig files on projects so they are run against the Octopus Instance that's being created by this build.")
     .Does(() =>
 {    
     StartPowershellFile("Octoposh.Tests/Scripts/replaceAppSettings.ps1", new PowershellSettings()
+		.OutputToAppConsole(false)
         .SetFormatOutput()
         .SetLogOutput()
         .WithArguments(args=>
@@ -110,6 +110,7 @@ Task("Update-Module-Manifest")
     .Does(() =>
 {    
     StartPowershellFile("Scripts/UpdateModuleManifest.ps1", new PowershellSettings()
+		.OutputToAppConsole(false)
         .SetFormatOutput()
         .SetLogOutput()
         .WithArguments(args=>
