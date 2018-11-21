@@ -69,13 +69,18 @@ Param(
 
     [Parameter(ParameterSetName='PowershellModule')]
     [switch]$GenerateTestData = $false,
+	
+	[Parameter(ParameterSetName='PowershellModule')]
+    [switch]$SkipUnitTests = $true,
 
     [string]$BinaryVersion,
 
     [Parameter(ParameterSetName='Website',Mandatory = $true)]
     [switch]$BuildWebsite,    
     [Parameter(ParameterSetName='PowershellModule',Mandatory = $true)]
-    [switch]$BuildPowershellModule
+    [switch]$BuildPowershellModule,
+	[Parameter(ParameterSetName='PackageModule',Mandatory = $true)]
+    [switch]$PackagePowershellModule
 )
 
 #region BaseCakeScript
@@ -218,7 +223,7 @@ else{
 #endregion
 
 if([string]::IsNullOrWhiteSpace($BinaryVersion)){
-    $BinaryVersion = "0.0.0.0"
+    $BinaryVersion = "0.0.0.1"
 }
 
 If($PSCmdlet.ParameterSetName -eq "PowershellModule"){
@@ -228,7 +233,7 @@ If($PSCmdlet.ParameterSetName -eq "PowershellModule"){
     # Start Cake
     Write-Host "Running build script..."
 
-    $expression = "& `"$CAKE_EXE`" `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental $ScriptArgs -ConfigFile=`"$ConfigFile`" -BinaryVersion=`"$BinaryVersion`" -RemoveOctopusInstanceAtBeggining=`"$RemoveOctopusInstanceAtBeggining`" -CreateOctopusInstance=`"$CreateOctopusInstance`" -RemoveOctopusInstanceAtEnd=`"$RemoveOctopusInstanceAtEnd`" -GenerateTestData=`"$GenerateTestData`""
+    $expression = "& `"$CAKE_EXE`" `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental $ScriptArgs -ConfigFile=`"$ConfigFile`" -BinaryVersion=`"$BinaryVersion`" -RemoveOctopusInstanceAtBeggining=`"$RemoveOctopusInstanceAtBeggining`" -CreateOctopusInstance=`"$CreateOctopusInstance`" -RemoveOctopusInstanceAtEnd=`"$RemoveOctopusInstanceAtEnd`" -GenerateTestData=`"$GenerateTestData`" -SkipUnitTests=`"$SkipUnitTests`""
 
     Write-Verbose "About to run [$expression]"
 
@@ -245,6 +250,22 @@ If($PSCmdlet.ParameterSetName -eq "Website"){
     Write-Host "Running build script..."
 
     $expression = "& `"$CAKE_EXE`" `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental $ScriptArgs -BinaryVersion=`"$BinaryVersion`" "
+
+    Write-Verbose "About to run [$expression]"
+
+    Invoke-Expression $expression
+
+    exit $LASTEXITCODE
+}
+
+If($PSCmdlet.ParameterSetName -eq "PackageModule"){
+    
+    $script = "PowershellModule_Package.cake"
+
+    # Start Cake
+    Write-Host "Running build script..."
+
+    $expression = "& `"$CAKE_EXE`" `"$Script`" -target=`"$Target`" -configuration=`"$Configuration`" -verbosity=`"$Verbosity`" $UseMono $UseDryRun $UseExperimental $ScriptArgs -ConfigFile=`"$ConfigFile`" -BinaryVersion=`"$BinaryVersion`" "
 
     Write-Verbose "About to run [$expression]"
 

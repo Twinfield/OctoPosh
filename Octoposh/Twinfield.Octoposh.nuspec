@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Twinfield.Octoposh</id>
+		<version>$version$</version>
+		<title>Twinfield.Octoposh</title>
+		<authors>Twinfield International N.V.</authors>
+		<owners>Twinfield International N.V.</owners>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Twinfield Octoposh fork</description>
+		<copyright>Copyright Twinfield International N.V. 2018</copyright>
+		<tags>OctopusDeploy Deployment Octopus PSModule</tags>
+	</metadata>
+	<files>
+		<file src="**\*" target="" exclude="DebugBootstrapper.ps1" />
+	</files>
+</package>
+

@@ -46,3 +46,4 @@ Octoposh.Tests/publish
 #web library files
 Octoposh.web/wwwroot/lib/*
 
+Artifacts/

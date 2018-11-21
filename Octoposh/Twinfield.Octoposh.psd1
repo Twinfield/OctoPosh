@@ -1,10 +1,10 @@
 @{
 #
 # Script module or binary module file associated with this manifest.
-RootModule = 'OctoPosh.dll'
+RootModule = 'Twinfield.Octoposh.dll'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.0'
+ModuleVersion = '1.0.2'
 
 # Author of this module
 Author = 'Dalmiro Granias ; http://about.me/dalmiro.granias'

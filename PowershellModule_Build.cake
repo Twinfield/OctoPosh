@@ -15,6 +15,8 @@ var CreateOctopusInstance = Argument("CreateOctopusInstance", false);
 var RemoveOctopusInstanceAtEnd = Argument("RemoveOctopusInstanceAtEnd", false);
 var GenerateTestData = Argument("GenerateTestData", false);
 
+var SkipUnitTests = Argument("SkipUnitTests", true);
+
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
@@ -27,7 +29,10 @@ var testOutputDir = MakeAbsolute(Directory("./Octoposh.Tests/Publish")).FullPath
 
 var pathsToClean = new string[]{modulePublishDir,testDataGeneratorPublishDir,testOutputDir};
 
-var ManifestPath = Directory(modulePublishDir) + Directory("Octoposh.psd1");
+var ManifestPath = Directory(modulePublishDir) + Directory("Twinfield.Octoposh.psd1");
+
+var ModuleNuspecPath = Directory(modulePublishDir) + File("Twinfield.Octoposh.nuspec");
+var artifactsPath = MakeAbsolute(Directory("./Artifacts/")).FullPath;
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -150,6 +155,7 @@ Task("Create-Octopus-Instance")
 
 Task("Start-Octopus-Server")
     .IsDependentOn("Create-Octopus-Instance")
+	.WithCriteria(SkipUnitTests == false)
     .Description("Make sure the Octopus Server is started before running tests")   
     .Does(() =>
 {    
@@ -180,6 +186,7 @@ Task("Run-TestDatagenerator")
 
 Task("Run-Unit-Tests")
     .IsDependentOn("Run-TestDatagenerator")
+	.WithCriteria(SkipUnitTests == false)
     .Does(() =>
 {    
     NUnit3("./Octoposh.Tests/bin/" + configuration + "/*.Tests.dll", new NUnit3Settings {        
@@ -211,7 +218,6 @@ Task("Remove-Octopus-Instance-At-End")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    //.IsDependentOn("testDelete"); 
     .IsDependentOn("Remove-Octopus-Instance-At-End"); 
 
 //////////////////////////////////////////////////////////////////////
