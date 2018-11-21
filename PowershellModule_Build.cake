@@ -69,6 +69,7 @@ Task("Replace-Test-Project-App-Settings")
         }));
 
     StartPowershellFile("Octoposh.TestDataGenerator/Scripts/replaceAppSettings.ps1", new PowershellSettings()
+		.OutputToAppConsole(false)
         .SetFormatOutput()
         .SetLogOutput()
         .WithArguments(args=>
